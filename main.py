@@ -12,20 +12,18 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],    # during development ok, restrict in production
+    allow_origins=["https://plant-leaf-health.vercel.app/", "http://localhost:5173"],   
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-MODEL_PATH = "best_model.keras"   # put your model file here (same folder)
-IMG_SIZE = (128, 128)             # must match training size
+MODEL_PATH = "best_model.keras"   
+IMG_SIZE = (128, 128)            
 
-# Load model once at startup
 try:
     model = tf.keras.models.load_model(MODEL_PATH)
 except Exception as e:
-    # If loading fails, raise on startup to make the error visible
     raise RuntimeError(f"Failed to load model at {MODEL_PATH}: {e}")
 
 @app.get("/")
